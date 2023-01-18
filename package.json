@@ -1,0 +1,21 @@
+{
+    "private": true,
+    "name": "dev",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "dev": "parcel src/index.html --open",
+        "build": "parcel build src/index.html --no-source-maps"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^18.11.18",
+        "@types/p5": "^1.4.3",
+        "parcel": "^2.8.2",
+        "process": "^0.11.10"
+    },
+    "dependencies": {
+        "p5": "^1.5.0"
+    }
+}
