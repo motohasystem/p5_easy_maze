@@ -1,22 +1,46 @@
 import p5 from "p5";
-import { MazeBuilder, TileType } from "./maze_builder";
-import { Stage } from "./stage_feeder";
+import { Maze, MazeBuilder, TileType } from "./maze_builder";
+import { Stage as StageFunc } from "./stage_feeder";
 
+// 基底クラス
 export class SimpleStage {
-    static run_stage: Stage = (b: MazeBuilder, p: p5) => {
-        console.log("run simple stage.")
-        return true
+    // Stage関数を返すget_run_stage() を実装すること
+    get_stage(): StageFunc {
+        return (m: Maze, p: p5) => {
+            console.log("run simple stage.")
+            return true
+        }
     }
-
 }
 
-export class DrawStepStage {
+// 指定したマスにスタートとゴールを描画する
+export class DefineStartAndFinish extends SimpleStage {
+
+}
+// draw_start_and_goal(p: p5, sx: num3er, sy: number, gx: number, gy: number) {
+
+
+// 幅優先探索するステージ
+// export class SearchWithBreadthFirst extends SimpleStage {
+//     constructor()
+//     get_stage(): StageFunc {
+//         return (b: MazeBuilder, p: p5) => {
+//             console.log("run simple stage.")
+//             return true
+//         }
+//     }
+// }
+
+
+// ひとマスずつ迷路を描画するステージ
+export class DrawStepStage extends SimpleStage {
     panel_pointer: number
     panel_size: number
     buffer: number
     border_outline: number
 
     constructor(panel_size: number, outline: number = 10) {
+        super()
         this.panel_pointer = 0
 
         this.panel_size = panel_size
@@ -25,26 +49,27 @@ export class DrawStepStage {
         console.log(`pointer: ${this.panel_pointer}`)
     }
 
-    run_stage: Stage = (b: MazeBuilder, p: p5) => {
-        console.log("run simple stage.")
-        return true
-    }
+    // run_stage: Stage = (b: MazeBuilder, p: p5) => {
+    //     console.log("run simple stage.")
+    //     return true
+    // }
 
-    get_run_stage(): Stage {
-        return (builder: MazeBuilder, p: p5) => {
+    // Stage関数を返す
+    get_stage() {
+        return (m: Maze, p: p5) => {
             console.log("draw step 1")
             console.log(`pointer: ${this.panel_pointer}`)
-            const point_x = this.panel_pointer % builder.width
-            const point_y = Math.floor(this.panel_pointer / builder.width)
+            const point_x = this.panel_pointer % m.width
+            const point_y = Math.floor(this.panel_pointer / m.width)
 
-            if (point_y == builder.floor.length) {
+            if (point_y == m.floor.length) {
                 // this.finished_draw_maze = true
                 return true
             }
             console.log({ point_y })
             console.log({ point_x })
             console.log("draw step 2")
-            const f = builder.floor[point_y][point_x]
+            const f = m.floor[point_y][point_x]
             console.log("draw step 3")
             this.draw_block(p, f, point_x, point_y)
             this.panel_pointer++
@@ -58,20 +83,20 @@ export class DrawStepStage {
      * 生成済みの迷路を１マスずつ描画していく
      * @param p p5オブジェクト
      */
-    draw_step(builder: MazeBuilder, p: p5) {
+    draw_step(m: Maze, p: p5) {
         console.log("draw step 1")
         console.log(`pointer: ${this.panel_pointer}`)
-        const point_x = this.panel_pointer % builder.width
-        const point_y = Math.floor(this.panel_pointer / builder.width)
+        const point_x = this.panel_pointer % m.width
+        const point_y = Math.floor(this.panel_pointer / m.width)
 
-        if (point_y == builder.floor.length) {
+        if (point_y == m.floor.length) {
             // this.finished_draw_maze = true
             return true
         }
         console.log({ point_y })
         console.log({ point_x })
         console.log("draw step 2")
-        const f = builder.floor[point_y][point_x]
+        const f = m.floor[point_y][point_x]
         console.log("draw step 3")
         this.draw_block(p, f, point_x, point_y)
         this.panel_pointer++

@@ -25,7 +25,7 @@ const sketch = (p: p5) => {
         builder.make_maze()
         builder.debug_print_maze()
 
-        drawer = new MazeDrawer(builder, 50)
+        drawer = new MazeDrawer(builder.get_maze(), 50)
         drawer.init(p)
     };
 

@@ -20,14 +20,7 @@ export const TileChar = [
     , 'W' // TileType.Wall: ''
 ]
 
-export class MazeBuilder {
-    // static TileType = {
-    //     Board: 'board'      // 床板
-    //     , Column: 'column'    // 柱
-    //     , Wall: 'wall'        // 壁
-    // } as const
-
-
+export class Maze {
     width: number   // 迷路の幅のマス
     height: number  // 迷路の奥行きのマス
     floor: number[][]   // 二次元迷路の全体
@@ -35,8 +28,7 @@ export class MazeBuilder {
     constructor(width: number, height: number) {
         this.width = width
         this.height = height
-        // this.panel
-
+        // this.floor = []
         this.init()
     }
 
@@ -53,12 +45,26 @@ export class MazeBuilder {
         }
         console.log('initialized.')
     }
+}
+
+export class MazeBuilder {
+    maze: Maze      // 迷路情報
+
+    constructor(width: number, height: number) {
+        this.maze = new Maze(width, height)
+        this.maze.init()
+    }
+
+    get_maze(): Maze {
+        return this.maze
+    }
+
 
     // ひとマスおきに柱(1)を立てる
     pile_driving() {
-        for (let j: number = 1; j < this.height; j += 2) {
-            for (let i: number = 1; i < this.width; i += 2) {
-                this.floor[j][i] = TileType.Column
+        for (let j: number = 1; j < this.maze.height; j += 2) {
+            for (let i: number = 1; i < this.maze.width; i += 2) {
+                this.maze.floor[j][i] = TileType.Column
             }
         }
         console.log('piles drivered.')
@@ -66,8 +72,8 @@ export class MazeBuilder {
 
     // すべての柱を倒して迷路を作る
     make_maze() {
-        for (let y: number = 1; y <= this.height - 1; y += 2) {
-            for (let x: number = 1; x <= this.width - 1; x += 2) {
+        for (let y: number = 1; y <= this.maze.height - 1; y += 2) {
+            for (let x: number = 1; x <= this.maze.width - 1; x += 2) {
                 this.make_wall(x, y)
             }
         }
@@ -76,8 +82,8 @@ export class MazeBuilder {
 
     // 指定した柱を倒して壁(2)を作る
     make_wall(x: number, y: number) {
-        if (this.floor[y][x] != TileType.Column) {
-            throw new Error(`${x}:${y}には柱がありません。(${this.floor[y][x]})`)
+        if (this.maze.floor[y][x] != TileType.Column) {
+            throw new Error(`${x}:${y}には柱がありません。(${this.maze.floor[y][x]})`)
         }
 
         let wall_x: number
@@ -114,12 +120,12 @@ export class MazeBuilder {
                     throw new Error(`コンパスがありえない方角を指しました(${compass})`)
             }
             // console.log(`x:${wall_x}: y:${wall_y}`)
-        } while (this.floor[wall_y][wall_x] == TileType.Wall)   // 乱数の指す方角がすでに壁の場合はやり直し
-        this.floor[wall_y][wall_x] = TileType.Wall
+        } while (this.maze.floor[wall_y][wall_x] == TileType.Wall)   // 乱数の指す方角がすでに壁の場合はやり直し
+        this.maze.floor[wall_y][wall_x] = TileType.Wall
     }
 
     debug_print_maze() {
-        this.floor.forEach(row => {
+        this.maze.floor.forEach(row => {
             const line = row.map((f) => {
                 // return `${String(f).padStart(3, '0')}`
                 return TileChar[f]

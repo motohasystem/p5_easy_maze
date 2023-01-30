@@ -1,19 +1,20 @@
 import p5 from "p5"
-import { MazeBuilder } from "./maze_builder"
+import { Maze, MazeBuilder } from "./maze_builder"
 
-export type Stage = (b: MazeBuilder, p: p5) => boolean
+export type Stage = (m: Maze, p: p5) => boolean
 
 export class StageFeeder {
     stage_pointer: number
     stages: Stage[]
     state_pause: boolean
-    builder: MazeBuilder
+    maze: Maze
+    // builder: MazeBuilder
 
-    constructor(builder: MazeBuilder, stages: Stage[]) {
+    constructor(m: Maze, stages: Stage[]) {
         this.stage_pointer = 0
         this.stages = stages
         this.state_pause = true    // trueのときは入力を待つ
-        this.builder = builder
+        this.maze = m
     }
 
     run(p: p5) {
@@ -35,7 +36,7 @@ export class StageFeeder {
                 this.state_pause = true
             }
             else {
-                this.state_pause = this.stages[this.stage_pointer](this.builder, p)
+                this.state_pause = this.stages[this.stage_pointer](this.maze, p)
                 // trueが帰っていればステージが終わっているので次に進める
                 if (this.state_pause == true) {
                     console.log("next stage")
