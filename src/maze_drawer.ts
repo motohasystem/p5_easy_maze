@@ -1,6 +1,6 @@
 import p5 from "p5";
 import { Maze, MazeBuilder, TileType } from "./maze_builder"
-import { DrawStepStage, SimpleStage } from "./stages";
+import { DrawStepStage, FlagStartAndFinish, SimpleStage } from "./stages";
 import { StageFeeder } from "./stage_feeder";
 
 
@@ -40,8 +40,11 @@ export class MazeDrawer {
         p.fill(0, 0, 0)
 
         // 迷路描画ステージ
-        const draw_step = new DrawStepStage(this.panel_size)
+        const draw_step = new DrawStepStage(p, this.panel_size)
         const run_draw_stage = draw_step.get_stage()
+
+        const draw_flags = new FlagStartAndFinish(p, this.panel_size, this.border_outline, 0, 0, 10, 10)
+        const run_draw_flags = draw_flags.get_stage()
 
         // 幅優先探索ステージ
         // const breadth_stage = new SearchWithBreadthFirst()
@@ -50,6 +53,7 @@ export class MazeDrawer {
             [
                 // SimpleStage.run_stage
                 run_draw_stage
+                , run_draw_flags
             ]
         )
 
