@@ -25,6 +25,26 @@ export class SimpleStage {
         }
     }
 
+    /**
+     * 迷路の座標を指定してキャラクタを描画する
+     * @param char 
+     * @param m
+     * @param panel_x 
+     * @param panel_y 
+     */
+    text(char: string, m: Maze, panel_x: number, panel_y: number) {
+        const sx = panel_x * this.panel_size + this.buffer
+        const sy = panel_y * this.panel_size + this.buffer
+
+        this.draw_char(char, sx, sy)
+    }
+
+    /**
+     * キャンバスの座標を指定してキャラクタを描画する
+     * @param char 
+     * @param x 
+     * @param y 
+     */
     draw_char(char: string, x: number, y: number) {
         this.p.fill(255, 0, 50)
         this.p.textSize(this.panel_size * 0.8)
@@ -51,15 +71,8 @@ export class FlagStartAndFinish extends SimpleStage {
 
     get_stage(): StageFunc {
         return (m: Maze, p: p5) => {
-            const sx = this.sx * this.panel_size + this.buffer
-            const sy = this.sy * this.panel_size + this.buffer
-            // const fx = this.fx * this.panel_size + this.buffer
-            // const fy = this.fy * this.panel_size + this.buffer
-            const fx = (m.width - 1) * this.panel_size + this.buffer
-            const fy = (m.height - 1) * this.panel_size + this.buffer
-
-            this.draw_char('S', sx, sy)
-            this.draw_char('G', fx, fy)
+            this.text('S', m, this.sx, this.sy)
+            this.text('G', m, this.fx, this.fy)
 
             return true
         }

@@ -43,7 +43,7 @@ export class MazeDrawer {
         const draw_step = new DrawStepStage(p, this.panel_size)
         const run_draw_stage = draw_step.get_stage()
 
-        const draw_flags = new FlagStartAndFinish(p, this.panel_size, this.border_outline, 0, 0, 10, 10)
+        const draw_flags = new FlagStartAndFinish(p, this.panel_size, this.border_outline, 0, 0, this.maze.width - 1, this.maze.height - 1)
         const run_draw_flags = draw_flags.get_stage()
 
         // 幅優先探索ステージ
