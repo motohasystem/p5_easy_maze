@@ -45,12 +45,32 @@ export class SimpleStage {
      * @param x 
      * @param y 
      */
-    draw_char(char: string, x: number, y: number) {
-        this.p.fill(255, 0, 50)
+    draw_char(char: string, x: number, y: number, color: string = '#990033') {
+        this.p.fill(color)
         this.p.textSize(this.panel_size * 0.8)
         this.p.textAlign(this.p.CENTER, this.p.CENTER)
         this.p.text(char, x, y)
     }
+
+
+    /**
+     * 迷路の座標を指定してブロックを描画する
+     * @param p 
+     * @param x 
+     * @param y 
+     * @param color 
+     */
+    draw_rect(p: p5, x: number, y: number, color: string) {
+        const size = this.panel_size
+        p.fill(color)
+        p.rect(this.buffer + x * size, this.buffer + y * size, size, size)
+    }
+}
+
+
+// 幅優先探索でゴールからスタートを探索していき、スタートからゴールの順に最短経路を塗りつぶす
+export class SearchWithBreadthFirst extends SimpleStage {
+
 }
 
 // 指定したマスにスタートとゴールを描画する
@@ -166,21 +186,23 @@ export class DrawStepStage extends SimpleStage {
         return false
     }
 
+    // https://colordrop.io/
+    // ルート探索時の塗りつぶしを #a1bad0 で塗る
     draw_block(p: p5, f: number, x: number, y: number) {
         // console.log(`f:${f} x:${x} y:${y}`)
+        let color
         switch (f) {
             case TileType.Board:
-                p.fill(255, 255, 255)
+                color = '#f3e8d6'
                 break
             case TileType.Column:
-                p.fill(0, 0, 0)
+                color = '#d0a727'
                 break
             case TileType.Wall:
-                p.fill(0, 0, 255)
+                color = '#667572'
                 break
         }
-        const size = this.panel_size
-        p.rect(this.buffer + x * size, this.buffer + y * size, size, size)
+        this.draw_rect(p, x, y, color)
     }
 
 }
