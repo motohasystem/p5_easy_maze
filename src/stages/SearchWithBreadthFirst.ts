@@ -28,31 +28,37 @@ export class SearchWithBreadthFirst extends SimpleStage {
         const pointer = new Point(this.finish.x, this.finish.y)
 
         // 探索対象の座標を持つ（TileType.Board である前提）
-        const lookup: Point[] = [pointer]
+        // const lookup: Point[] = [pointer]
+        this.next_lkup = [pointer]
         let order = 0
+        this.resolve.floor[pointer.y][pointer.x] = 0
 
         return (m: Maze, p: p5) => {
-            this.next_lkup = lookup.reduce((next: Point[], floor) => {
+            console.log(`SearchWithBreadthFirst: ${this.next_lkup}`)
+            this.next_lkup = this.next_lkup.reduce((next: Point[], floor) => {
                 order = this.resolve.point(floor)   // 足元に書いてある番号
                 const dir: Point[] = this.lookup_direction(floor)   // 東西南北のうちTileType.Boardの座標配列を返す
                 if (dir.length > 0) { // length == 0 のときは行き止まり
                     dir.forEach((point) => {
                         // 床番に+1した番号を書き込む
-                        this.resolve.floor[point.y][point.x] = order + 1
+                        const drawing = order + 1
+                        this.resolve.floor[point.y][point.x] = drawing
+                        this.text(drawing.toString(), m, point)
+                        next.push(point)
                     })
-                    next.concat(dir)
-                    // TODO: この続きを実装する
+                    // next.concat(dir)
                     console.log(this.resolve.floor)
                 }
 
                 return next
             }, [])
+            console.log(this.next_lkup)
 
             if (this.next_lkup.length == 0) {
-                return true
+                return true     // 探索終了
             }
 
-            console.log(this.next_lkup)
+            console.log(`continue: ${this.next_lkup}`)
 
             return false
         }
@@ -71,19 +77,19 @@ export class SearchWithBreadthFirst extends SimpleStage {
         const east_tile = this.maze.point(east)
         const west_tile = this.maze.point(west)
 
-        if (north_tile == TileType.Board) {
+        if (north_tile == TileType.Board && this.resolve.point(north) == -1) {
             result.push(north)
         }
 
-        if (south_tile == TileType.Board) {
+        if (south_tile == TileType.Board && this.resolve.point(south) == -1) {
             result.push(south)
         }
 
-        if (east_tile == TileType.Board) {
+        if (east_tile == TileType.Board && this.resolve.point(east) == -1) {
             result.push(east)
         }
 
-        if (west_tile == TileType.Board) {
+        if (west_tile == TileType.Board && this.resolve.point(west) == -1) {
             result.push(west)
         }
 
