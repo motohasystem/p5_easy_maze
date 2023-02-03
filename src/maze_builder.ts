@@ -1,6 +1,16 @@
 
 // export type TileType = typeof tileType[keyof typeof tileType]
 
+export class Point {
+    x: number
+    y: number
+
+    constructor(x: number = -1, y: number = -1) {
+        this.x = x
+        this.y = y
+    }
+}
+
 export enum direction {
     north
     , east
@@ -33,17 +43,30 @@ export class Maze {
     }
 
     // 迷路全体の配列を構築する
-    init() {
+    init(carpet = TileType.Board) {
         this.floor = []
         for (let j: number = 0; j < this.height; j++) {
             const row: number[] = []
             for (let i: number = 0; i < this.width; i++) {
-                row.push(TileType.Board)
+                row.push(carpet)
             }
             this.floor.push(row)
             // console.log(`${this.floor[j]}`)
         }
         console.log('initialized.')
+    }
+
+    point(point: Point): number {
+        if (point.y < 0 || point.y >= this.height) {
+            return -1
+        }
+
+        if (point.x < 0 || point.x >= this.width) {
+            return -1
+        }
+
+        console.log(`${point.x}, ${point.y}`)
+        return this.floor[point.y][point.x]
     }
 }
 

@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { Maze, MazeBuilder, TileType } from "./maze_builder";
+import { Maze, MazeBuilder, Point, TileType } from "./maze_builder";
 import { Stage as StageFunc } from "./stage_feeder";
 
 // 基底クラス
@@ -32,11 +32,12 @@ export class SimpleStage {
      * @param panel_x 
      * @param panel_y 
      */
-    text(char: string, m: Maze, panel_x: number, panel_y: number) {
-        const sx = panel_x * this.panel_size + this.buffer
-        const sy = panel_y * this.panel_size + this.buffer
+    text(char: string, m: Maze, point: Point) {
+        const start = new Point()
+        start.x = point.x * this.panel_size + this.buffer
+        start.y = point.y * this.panel_size + this.buffer
 
-        this.draw_char(char, sx, sy)
+        this.draw_char(char, start)
     }
 
     /**
@@ -45,11 +46,11 @@ export class SimpleStage {
      * @param x 
      * @param y 
      */
-    draw_char(char: string, x: number, y: number, color: string = '#990033') {
+    draw_char(char: string, point: Point, color: string = '#990033') {
         this.p.fill(color)
         this.p.textSize(this.panel_size * 0.8)
         this.p.textAlign(this.p.CENTER, this.p.CENTER)
-        this.p.text(char, x, y)
+        this.p.text(char, point.x, point.y)
     }
 
 
@@ -60,59 +61,35 @@ export class SimpleStage {
      * @param y 
      * @param color 
      */
-    draw_rect(p: p5, x: number, y: number, color: string) {
+    draw_rect(p: p5, point: Point, color: string) {
         const size = this.panel_size
         p.fill(color)
-        p.rect(this.buffer + x * size, this.buffer + y * size, size, size)
+        p.rect(this.buffer + point.x * size, this.buffer + point.y * size, size, size)
     }
 }
 
 
-// 幅優先探索でゴールからスタートを探索していき、スタートからゴールの順に最短経路を塗りつぶす
-export class SearchWithBreadthFirst extends SimpleStage {
-
-}
 
 // 指定したマスにスタートとゴールを描画する
 export class FlagStartAndFinish extends SimpleStage {
-    sx: number
-    sy: number
-    fx: number
-    fy: number
+    start: Point
+    finish: Point
 
-    constructor(p: p5, panel_size: number, outline: number, sx: number, sy: number, fx: number, fy: number) {
+    constructor(p: p5, panel_size: number, outline: number, start: Point, finish: Point) {
         super(p, panel_size, outline)
-
-        this.sx = sx
-        this.sy = sy
-        this.fx = fx
-        this.fy = fy
+        this.start = start
+        this.finish = finish
     }
 
     get_stage(): StageFunc {
         return (m: Maze, p: p5) => {
-            this.text('S', m, this.sx, this.sy)
-            this.text('G', m, this.fx, this.fy)
+            this.text('S', m, this.start)
+            this.text('G', m, this.finish)
 
             return true
         }
     }
-
 }
-// draw_start_and_goal(p: p5, sx: num3er, sy: number, gx: number, gy: number) {
-
-
-// 幅優先探索するステージ
-// export class SearchWithBreadthFirst extends SimpleStage {
-//     constructor()
-//     get_stage(): StageFunc {
-//         return (b: MazeBuilder, p: p5) => {
-//             console.log("run simple stage.")
-//             return true
-//         }
-//     }
-// }
-
 
 // ひとマスずつ迷路を描画するステージ
 export class DrawStepStage extends SimpleStage {
@@ -124,36 +101,27 @@ export class DrawStepStage extends SimpleStage {
     constructor(p: p5, panel_size: number, outline: number = 10) {
         super(p, panel_size, outline)
         this.panel_pointer = 0
-
-        // this.panel_size = panel_size
-        // this.border_outline = outline
-        // this.buffer = outline + panel_size / 2
         console.log(`pointer: ${this.panel_pointer}`)
     }
 
-    // run_stage: Stage = (b: MazeBuilder, p: p5) => {
-    //     console.log("run simple stage.")
-    //     return true
-    // }
 
     // Stage関数を返す
     get_stage() {
         return (m: Maze, p: p5) => {
             console.log("draw step 1")
             console.log(`pointer: ${this.panel_pointer}`)
-            const point_x = this.panel_pointer % m.width
-            const point_y = Math.floor(this.panel_pointer / m.width)
+            const point = new Point()
+            point.x = this.panel_pointer % m.width
+            point.y = Math.floor(this.panel_pointer / m.width)
 
-            if (point_y == m.floor.length) {
+            if (point.y == m.floor.length) {
                 // this.finished_draw_maze = true
                 return true
             }
-            console.log({ point_y })
-            console.log({ point_x })
             console.log("draw step 2")
-            const f = m.floor[point_y][point_x]
+            const f = m.floor[point.y][point.x]
             console.log("draw step 3")
-            this.draw_block(p, f, point_x, point_y)
+            this.draw_block(p, f, point)
             this.panel_pointer++
 
             return false
@@ -168,19 +136,18 @@ export class DrawStepStage extends SimpleStage {
     draw_step(m: Maze, p: p5) {
         console.log("draw step 1")
         console.log(`pointer: ${this.panel_pointer}`)
-        const point_x = this.panel_pointer % m.width
-        const point_y = Math.floor(this.panel_pointer / m.width)
+        const point = new Point()
+        point.x = this.panel_pointer % m.width
+        point.y = Math.floor(this.panel_pointer / m.width)
 
-        if (point_y == m.floor.length) {
+        if (point.y == m.floor.length) {
             // this.finished_draw_maze = true
             return true
         }
-        console.log({ point_y })
-        console.log({ point_x })
         console.log("draw step 2")
-        const f = m.floor[point_y][point_x]
+        const f = m.floor[point.y][point.x]
         console.log("draw step 3")
-        this.draw_block(p, f, point_x, point_y)
+        this.draw_block(p, f, point)
         this.panel_pointer++
 
         return false
@@ -188,7 +155,7 @@ export class DrawStepStage extends SimpleStage {
 
     // https://colordrop.io/
     // ルート探索時の塗りつぶしを #a1bad0 で塗る
-    draw_block(p: p5, f: number, x: number, y: number) {
+    draw_block(p: p5, f: number, point: Point) {
         // console.log(`f:${f} x:${x} y:${y}`)
         let color
         switch (f) {
@@ -202,7 +169,7 @@ export class DrawStepStage extends SimpleStage {
                 color = '#667572'
                 break
         }
-        this.draw_rect(p, x, y, color)
+        this.draw_rect(p, point, color)
     }
 
 }
