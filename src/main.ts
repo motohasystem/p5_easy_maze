@@ -4,10 +4,11 @@ import { MazeDrawer } from "./maze_drawer";
 import p5 from "p5";
 
 const sketch = (p: p5) => {
-    const BLOCK_SIZE = 50
-    const BORDER_WIDTH = 20
-    const MAZE_X = 17
+    const BLOCK_SIZE = 25
+    const MAZE_X = 11
     const MAZE_Y = 11
+
+    const BORDER_WIDTH = 20
     const builder = new MazeBuilder(MAZE_X, MAZE_Y)
 
     let drawer: MazeDrawer
@@ -25,7 +26,7 @@ const sketch = (p: p5) => {
         builder.make_maze()
         builder.debug_print_maze()
 
-        drawer = new MazeDrawer(builder.get_maze(), 50)
+        drawer = new MazeDrawer(builder.get_maze(), BLOCK_SIZE)
         drawer.init(p)
     };
 

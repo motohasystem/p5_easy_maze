@@ -1,6 +1,7 @@
 import p5 from "p5";
 import { Maze, MazeBuilder, Point, TileType } from "./maze_builder"
-import { DrawStepStage, FlagStartAndFinish, SimpleStage } from "./stages";
+import { FlagStartAndFinish } from "./stages/AbstractStage";
+import { DrawStepStage } from "./stages/DrawStepStage";
 import { SearchWithBreadthFirst } from "./stages/SearchWithBreadthFirst";
 import { StageFeeder } from "./stage_feeder";
 

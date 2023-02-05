@@ -2,12 +2,13 @@
 // 幅優先探索でゴールからスタートを探索していき
 
 import p5 from "p5"
+import { CONST } from "../constants";
 import { Maze, Point, TileType } from "../maze_builder"
-import { SimpleStage } from "../stages"
+import { AbstractStage } from "./AbstractStage"
 import { Stage as StageFunc } from "../stage_feeder";
 
 // スタートからゴールの順に最短経路を塗りつぶす
-export class SearchWithBreadthFirst extends SimpleStage {
+export class SearchWithBreadthFirst extends AbstractStage {
     start: Point
     finish: Point
     maze: Maze   // 迷路本体
@@ -18,6 +19,8 @@ export class SearchWithBreadthFirst extends SimpleStage {
         super(p, panel_size, outline)
         this.start = start
         this.finish = finish
+
+        // this.mark(p, "G", this.finish, CONST.COLOR_MARK)
 
         this.maze = maze
         this.resolve = new Maze(maze.width, maze.height)
@@ -35,6 +38,15 @@ export class SearchWithBreadthFirst extends SimpleStage {
 
         return (m: Maze, p: p5) => {
             console.log(`SearchWithBreadthFirst: ${this.next_lkup}`)
+
+            // スタート地点まで探索できたら終了
+            if (this.next_lkup.some((p: Point) => {
+                return this.start.equal(p)
+            })) {
+                this.mark(p, "S", this.start, CONST.COLOR_MARK)
+                return true
+            }
+
             this.next_lkup = this.next_lkup.reduce((next: Point[], floor) => {
                 order = this.resolve.point(floor)   // 足元に書いてある番号
                 const dir: Point[] = this.lookup_direction(floor)   // 東西南北のうちTileType.Boardの座標配列を返す
@@ -43,7 +55,7 @@ export class SearchWithBreadthFirst extends SimpleStage {
                         // 床番に+1した番号を書き込む
                         const drawing = order + 1
                         this.resolve.floor[point.y][point.x] = drawing
-                        this.text(drawing.toString(), m, point)
+                        this.text(drawing.toString(), point)
                         next.push(point)
                     })
                     // next.concat(dir)

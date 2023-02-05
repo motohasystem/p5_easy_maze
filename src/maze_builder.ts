@@ -9,6 +9,14 @@ export class Point {
         this.x = x
         this.y = y
     }
+
+    equal(p: Point): boolean {
+        if (p.x != this.x || p.y != this.y) {
+            return false
+        }
+
+        return true
+    }
 }
 
 export enum direction {
