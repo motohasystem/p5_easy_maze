@@ -73,7 +73,7 @@ export class Maze {
             return -1
         }
 
-        console.log(`${point.x}, ${point.y}`)
+        // console.log(`${point.x}, ${point.y}`)
         return this.floor[point.y][point.x]
     }
 }

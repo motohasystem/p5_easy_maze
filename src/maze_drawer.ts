@@ -2,6 +2,7 @@ import p5 from "p5";
 import { Maze, MazeBuilder, Point, TileType } from "./maze_builder"
 import { FlagStartAndFinish } from "./stages/AbstractStage";
 import { DrawStepStage } from "./stages/DrawStepStage";
+import { PaintShortestPath } from "./stages/PaintShortestPath";
 import { SearchWithBreadthFirst } from "./stages/SearchWithBreadthFirst";
 import { StageFeeder } from "./stage_feeder";
 
@@ -54,12 +55,19 @@ export class MazeDrawer {
         const breadth_stage = new SearchWithBreadthFirst(p, this.panel_size, this.border_outline, start, finish, this.maze)
         const run_search_maze = breadth_stage.get_stage()
 
+        const resolve = breadth_stage.resolve   // 解決配列を共有
+
+        // リペイントステージ
+        const repaint_stage = new PaintShortestPath(p, this.panel_size, this.border_outline, resolve, start, finish)
+        const run_repaint = repaint_stage.get_stage()
+
         this.stages = new StageFeeder(this.maze,
             [
                 // SimpleStage.run_stage
                 run_draw_stage
                 , run_draw_flags
                 , run_search_maze
+                , run_repaint
             ]
         )
 

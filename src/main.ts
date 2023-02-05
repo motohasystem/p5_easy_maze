@@ -1,12 +1,13 @@
 import { MazeBuilder } from "./maze_builder";
 import { MazeDrawer } from "./maze_drawer";
+// import { CONST } from "./constants";
 
 import p5 from "p5";
 
 const sketch = (p: p5) => {
     const BLOCK_SIZE = 25
-    const MAZE_X = 11
-    const MAZE_Y = 11
+    const MAZE_X = 5
+    const MAZE_Y = 5
 
     const BORDER_WIDTH = 20
     const builder = new MazeBuilder(MAZE_X, MAZE_Y)

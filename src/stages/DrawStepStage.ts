@@ -1,4 +1,5 @@
 import p5 from "p5"
+import { CONST } from "../constants"
 import { Maze, Point, TileType } from "../maze_builder"
 import { AbstractStage } from "./AbstractStage"
 
@@ -71,13 +72,13 @@ export class DrawStepStage extends AbstractStage {
         let color
         switch (f) {
             case TileType.Board:
-                color = '#f3e8d6'
+                color = CONST.COLOR_TILE_BOARD
                 break
             case TileType.Column:
-                color = '#d0a727'
+                color = CONST.COLOR_TILE_COLUMN
                 break
             case TileType.Wall:
-                color = '#667572'
+                color = CONST.COLOR_TILE_WALL
                 break
         }
         this.draw_rect(p, point, color)
