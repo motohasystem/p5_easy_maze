@@ -49,7 +49,18 @@ export class AbstractStage {
      */
     draw_char(char: string, point: Point, color: string = CONST.COLOR_DEFAULT_CHAR) {
         this.p.fill(color)
-        this.p.textSize(this.panel_size * 0.8)
+        let text_size
+        switch (char.length) {
+            case 1:
+            case 2:
+                text_size = this.panel_size * 0.7
+                break
+            case 3:
+            default:
+                text_size = this.panel_size * 0.5
+                break
+        }
+        this.p.textSize(text_size)
         this.p.textAlign(this.p.CENTER, this.p.CENTER)
         this.p.text(char, point.x, point.y)
     }

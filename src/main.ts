@@ -5,9 +5,9 @@ import { MazeDrawer } from "./maze_drawer";
 import p5 from "p5";
 
 const sketch = (p: p5) => {
-    const BLOCK_SIZE = 25
-    const MAZE_X = 5
-    const MAZE_Y = 5
+    const BLOCK_SIZE = 50
+    const MAZE_X = 45
+    const MAZE_Y = 45
 
     const BORDER_WIDTH = 20
     const builder = new MazeBuilder(MAZE_X, MAZE_Y)
