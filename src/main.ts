@@ -6,8 +6,25 @@ import p5 from "p5";
 
 const sketch = (p: p5) => {
     const BLOCK_SIZE = 50
-    const MAZE_X = 45
-    const MAZE_Y = 45
+    const MAZE_X = 9
+    const MAZE_Y = 9
+
+    // const BLOCK_SIZE = 24
+    // const MAZE_X = 45
+    // const MAZE_Y = 15
+
+
+    // const BLOCK_SIZE = 24
+    // const MAZE_X = 65
+    // const MAZE_Y = 35
+
+    // const BLOCK_SIZE = 12
+    // const MAZE_X = 65
+    // const MAZE_Y = 65
+
+    // const BLOCK_SIZE = 6
+    // const MAZE_X = 159
+    // const MAZE_Y = 159
 
     const BORDER_WIDTH = 20
     const builder = new MazeBuilder(MAZE_X, MAZE_Y)

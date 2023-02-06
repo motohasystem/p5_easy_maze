@@ -46,8 +46,14 @@ export class MazeDrawer {
         const draw_step = new DrawStepStage(p, this.panel_size)
         const run_draw_stage = draw_step.get_stage()
 
-        const start = new Point(0, 0)
-        const finish = new Point(this.maze.width - 1, this.maze.height - 1)
+        // 左上から右下まで
+        // const start = new Point(0, 0)
+        // const finish = new Point(this.maze.width - 1, this.maze.height - 1)
+
+        // 左下から右上まで
+        const start = new Point(0, this.maze.height - 1)
+        const finish = new Point(this.maze.width - 1, 0)
+
         const draw_flags = new FlagStartAndFinish(p, this.panel_size, this.border_outline, start, finish)
         const run_draw_flags = draw_flags.get_stage()
 

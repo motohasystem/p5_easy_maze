@@ -28,9 +28,6 @@ export class StageFeeder {
             }
         }
         else {
-            // console.log(this.stage_pointer)
-            // console.log(this.builder)
-            // console.log(this.stages)
             if (this.stages[this.stage_pointer] == undefined) {
                 console.info("finished!")
                 this.state_pause = true
