@@ -82,6 +82,7 @@ export class MazeBuilder {
     maze: Maze      // 迷路情報
 
     constructor(width: number, height: number) {
+
         this.maze = new Maze(width, height)
         this.maze.init()
     }
@@ -151,7 +152,9 @@ export class MazeBuilder {
                     throw new Error(`コンパスがありえない方角を指しました(${compass})`)
             }
             // console.log(`x:${wall_x}: y:${wall_y}`)
-        } while (this.maze.floor[wall_y][wall_x] == TileType.Wall)   // 乱数の指す方角がすでに壁の場合はやり直し
+        } while (wall_y < this.maze.height
+        && wall_x < this.maze.width
+            && this.maze.floor[wall_y][wall_x] == TileType.Wall)   // 乱数の指す方角がすでに壁の場合はやり直し
         this.maze.floor[wall_y][wall_x] = TileType.Wall
     }
 
