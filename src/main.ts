@@ -5,40 +5,25 @@ import { MazeDrawer } from "./maze_drawer";
 import p5 from "p5";
 
 const generate_sketch = (input_width: number, input_height: number, input_block: number) => {
+    const BLOCK_SIZE = input_block
+    const MAZE_X = input_width % 2 == 0 ? input_width + 1 : input_width
+    const MAZE_Y = input_height % 2 == 0 ? input_height + 1 : input_height
+
+    const BORDER_WIDTH = 20
+    const canvas_width = BORDER_WIDTH + MAZE_X * BLOCK_SIZE
+    const canvas_height = BORDER_WIDTH + MAZE_Y * BLOCK_SIZE
+
+    const builder = new MazeBuilder(MAZE_X, MAZE_Y)
+    builder.pile_driving()
+    builder.make_maze()
+    // builder.debug_print_maze()
+
+    const drawer = new MazeDrawer(builder.get_maze(), BLOCK_SIZE)
+
     return (p: p5) => {
-        const BLOCK_SIZE = input_block
-        const MAZE_X = input_width
-        const MAZE_Y = input_height
-
-        const BORDER_WIDTH = 20
-
-        let width = MAZE_X
-        let height = MAZE_Y
-        if (width % 2 == 0) {
-            width++
-        }
-        if (height % 2 == 0) {
-            height++
-        }
-
-        const builder = new MazeBuilder(width, height)
-
-        let drawer: MazeDrawer
 
         p.setup = () => {
-            const canvas_width = BORDER_WIDTH + width * BLOCK_SIZE
-            const canvas_height = BORDER_WIDTH + height * BLOCK_SIZE
-
-            // p.createCanvas(canvas_width, canvas_height);
-            console.log({ canvas_width })
-            console.log({ canvas_height })
             p.createCanvas(canvas_width, canvas_height);
-
-            builder.pile_driving()
-            builder.make_maze()
-            builder.debug_print_maze()
-
-            drawer = new MazeDrawer(builder.get_maze(), BLOCK_SIZE)
             drawer.init(p)
         };
 
