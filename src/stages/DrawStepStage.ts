@@ -6,8 +6,6 @@ import { AbstractStage } from "./AbstractStage"
 // ひとマスずつ迷路を描画するステージ
 export class DrawStepStage extends AbstractStage {
     panel_pointer: number
-    // panel_size: number
-    // buffer: number
     border_outline: number
     color_dict: string[]
 
@@ -28,8 +26,6 @@ export class DrawStepStage extends AbstractStage {
         const point = new Point()
         let f
         return (m: Maze, p: p5) => {
-            // console.log("draw step 1")
-            // console.log(`pointer: ${this.panel_pointer}`)
             point.x = this.panel_pointer % m.width
             point.y = Math.floor(this.panel_pointer / m.width)
 
@@ -50,8 +46,6 @@ export class DrawStepStage extends AbstractStage {
      * @param p p5オブジェクト
      */
     draw_step(m: Maze, p: p5) {
-        // console.log("draw step 1")
-        // console.log(`pointer: ${this.panel_pointer}`)
         const point = new Point()
         point.x = this.panel_pointer % m.width
         point.y = Math.floor(this.panel_pointer / m.width)
@@ -72,19 +66,6 @@ export class DrawStepStage extends AbstractStage {
     // https://colordrop.io/
     // ルート探索時の塗りつぶしを #a1bad0 で塗る
     draw_block(p: p5, f: number, point: Point) {
-        // console.log(`f:${f} x:${x} y:${y}`)
-        // let color
-        // switch (f) {
-        //     case TileType.Board:
-        //         color = CONST.COLOR_TILE_BOARD
-        //         break
-        //     case TileType.Column:
-        //         color = CONST.COLOR_TILE_COLUMN
-        //         break
-        //     case TileType.Wall:
-        //         color = CONST.COLOR_TILE_WALL
-        //         break
-        // }
         this.draw_rect(p, point, this.color_dict[f])
     }
 
