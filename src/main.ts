@@ -56,11 +56,13 @@ btn_run.addEventListener('click', () => {
         const sketch = generate_sketch(maze_width, maze_height, boxsize)
         instance = new p5(sketch);
         ae.value = 'stop'
+        ae.style.backgroundColor = '#FF6347'; // ボタンの色を赤っぽくする
     }
     else {
         instance.remove()
         instance.clear(1, 1, 1, 0)
         instance = undefined
         ae.value = 'run'
+        ae.style.backgroundColor = '#4CAF50'; // ボタンの色を元に戻す
     }
 })

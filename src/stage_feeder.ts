@@ -19,10 +19,9 @@ export class StageFeeder {
 
     run(p: p5) {
         if (this.state_pause) {
-            // キー入力を待って次に進む
-            if (p.keyIsPressed) {
-                console.log(p.keyCode)
-                console.log("key is pressed.")
+            // キー入力またはキャンバスのクリックまたはスマホ表示の際のタッチで次に進む
+            if (p.keyIsPressed || p.mouseIsPressed || p.touches.length > 0) {
+                console.log("Input detected.")
                 this.state_pause = false
                 p.keyIsPressed = false
             }

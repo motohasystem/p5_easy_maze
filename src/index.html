@@ -27,15 +27,39 @@
                 padding:7px;
                 font-size: large;
             }
+            .button {
+                background-color: #4CAF50; /* 緑色の背景 */
+                color: white; /* 白色の文字 */
+                border: none; /* 枠線なし */
+                border-radius: 4px; /* 角を丸く */
+                cursor: pointer; /* カーソルをポインターに */
+                transition: background-color 0.3s; /* 背景色の変化にアニメーションを追加 */
+            }
+
+            .button:hover {
+                background-color: #45a049; /* ホバー時の背景色 */
+            }
+
+            .textfield {
+                border: 1px solid #ccc; /* 薄いグレーの枠線 */
+                border-radius: 4px; /* 角を丸く */
+                box-sizing: border-box; /* ボックスサイズを調整 */
+                transition: border-color 0.3s; /* 枠線色の変化にアニメーションを追加 */
+            }
+
+            .textfield:focus {
+                border-color: #4CAF50; /* フォーカス時の枠線色 */
+                outline: none; /* デフォルトのアウトラインを削除 */
+            }
         </style>
     </head>
     <body>
         <h1>棒倒し法で迷路を描く</h1>
         <div class="forms">
             <input type="button" value="run" class="button" id="button_run"/>
-            <span class="labels">よこ: <input class="textfield" id="maze_width" type="number" value="11" style=""/></span>
-            <span class="labels">たて: <input class="textfield" id="maze_height" type="number" value="11" style=""/></span>
-            <span class="labels">マスの大きさ: <input class="textfield" id="maze_boxsize" type="number" value="50" style=""/></span>
+            <span class="labels">よこ: <input class="textfield" id="maze_width" type="number" value="11" style="width: 80px;"/></span>
+            <span class="labels">たて: <input class="textfield" id="maze_height" type="number" value="11" style="width: 80px;"/></span>
+            <span class="labels">マスの大きさ: <input class="textfield" id="maze_boxsize" type="number" value="50" style="width: 80px;"/></span>
         </div>
     </body>
 </html>
