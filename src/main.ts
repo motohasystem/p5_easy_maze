@@ -43,7 +43,7 @@ let instance: p5 | undefined = undefined;
 
 btn_run.addEventListener('click', () => {
     // フォーカスを外す
-    const ae = document.activeElement as HTMLInputElement
+    const ae = btn_run
     if (ae) {
         ae.blur()
     }
