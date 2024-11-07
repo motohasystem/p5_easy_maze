@@ -55,7 +55,7 @@ btn_run.addEventListener('click', () => {
     if (instance == undefined) {
         const sketch = generate_sketch(maze_width, maze_height, boxsize)
         instance = new p5(sketch);
-        ae.value = 'stop'
+        ae.value = 'reset'
         ae.style.backgroundColor = '#FF6347'; // ボタンの色を赤っぽくする
     }
     else {
