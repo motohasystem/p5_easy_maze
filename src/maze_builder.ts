@@ -1,6 +1,8 @@
 
 // export type TileType = typeof tileType[keyof typeof tileType]
 
+import { Xorshift } from "./xorshift"
+
 export class Point {
     x: number
     y: number
@@ -80,8 +82,10 @@ export class Maze {
 
 export class MazeBuilder {
     maze: Maze      // 迷路情報
+    xorshift: Xorshift
 
     constructor(width: number, height: number) {
+        this.xorshift = new Xorshift(Math.floor(Math.random() * 1000))
 
         this.maze = new Maze(width, height)
         this.maze.init()
@@ -121,16 +125,13 @@ export class MazeBuilder {
         let wall_x: number
         let wall_y: number
 
-        const compass_max = ((y) => {
-            if (y > 0) {
-                return 3
-            }
-            return 4
-        })(y)
+        const compass_max = y > 0 ? 3 : 4
+
 
         do {
-            const compass = Math.round(Math.random() * compass_max)   // 0: 9時, 1: 12時, 2: 3時, 4: 6時
-            // console.log(`compass: ${compass}`)
+            const compass = Math.floor(this.xorshift.next() * 4) // 0からcompass_maxまでの整数
+            // console.log({ next: xorshift.next() })
+            // console.log({ compass })
             switch (compass) {
                 case direction.north:
                     wall_x = x
@@ -151,10 +152,7 @@ export class MazeBuilder {
                 default:
                     throw new Error(`コンパスがありえない方角を指しました(${compass})`)
             }
-            // console.log(`x:${wall_x}: y:${wall_y}`)
-        } while (wall_y < this.maze.height
-        && wall_x < this.maze.width
-            && this.maze.floor[wall_y][wall_x] == TileType.Wall)   // 乱数の指す方角がすでに壁の場合はやり直し
+        } while (wall_y < this.maze.height && wall_x < this.maze.width && this.maze.floor[wall_y][wall_x] == TileType.Wall)
         this.maze.floor[wall_y][wall_x] = TileType.Wall
     }
 

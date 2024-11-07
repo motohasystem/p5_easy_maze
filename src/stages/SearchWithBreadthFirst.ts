@@ -29,48 +29,36 @@ export class SearchWithBreadthFirst extends AbstractStage {
 
     get_stage(): StageFunc {
         const pointer = new Point(this.finish.x, this.finish.y)
-
-        // 探索対象の座標を持つ（TileType.Board である前提）
-        // const lookup: Point[] = [pointer]
         this.next_lkup = [pointer]
         let order = 0
         this.resolve.floor[pointer.y][pointer.x] = 0
 
         return (m: Maze, p: p5) => {
-            console.log(`SearchWithBreadthFirst: ${this.next_lkup}`)
+            // console.log(`SearchWithBreadthFirst: ${this.next_lkup}`) // 不要なログは削除
 
-            // スタート地点まで探索できたら終了
-            if (this.next_lkup.some((p: Point) => {
-                return this.start.equal(p)
-            })) {
+            if (this.next_lkup.some((p: Point) => this.start.equal(p))) {
                 this.mark(p, "S", this.start, CONST.COLOR_MARK)
                 return true
             }
 
-            this.next_lkup = this.next_lkup.reduce((next: Point[], floor) => {
-                order = this.resolve.point(floor)   // 足元に書いてある番号
-                const dir: Point[] = this.lookup_direction(floor)   // 東西南北のうちTileType.Boardの座標配列を返す
-                if (dir.length > 0) { // length == 0 のときは行き止まり
-                    dir.forEach((point) => {
-                        // 床番に+1した番号を書き込む
-                        const drawing = order + 1
-                        this.resolve.floor[point.y][point.x] = drawing
-                        this.text(drawing.toString(), point)
-                        next.push(point)
-                    })
-                    // next.concat(dir)
-                    console.log(this.resolve.floor)
+            const newNextLkup: Point[] = []
+            for (const floor of this.next_lkup) {
+                order = this.resolve.point(floor)
+                const dir: Point[] = this.lookup_direction(floor)
+                for (const point of dir) {
+                    const drawing = order + 1
+                    this.resolve.floor[point.y][point.x] = drawing
+                    this.text(drawing.toString(), point)
+                    newNextLkup.push(point)
                 }
-
-                return next
-            }, [])
-            console.log(this.next_lkup)
+            }
+            this.next_lkup = newNextLkup
 
             if (this.next_lkup.length == 0) {
-                return true     // 探索終了
+                return true
             }
 
-            console.log(`continue: ${this.next_lkup}`)
+            // console.log(`continue: ${this.next_lkup}`) // 不要なログは削除
 
             return false
         }
